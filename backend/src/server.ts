@@ -19,22 +19,34 @@ dotenv.config();
 const app: Express = express();
 const httpServer = createServer(app);
 
+const allowedOrigins = [
+    'http://localhost:3000',
+    'https://ecologix-the-green-route-assistant-a0mqvh4xx.vercel.app'
+];
+
+const corsConfig = {
+    origin: function (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) {
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.includes(origin) || origin.endsWith('.vercel.app')) {
+            callback(null, true);
+        } else {
+            callback(null, true); // allow all temporarily
+        }
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+};
+
 const io = new SocketIOServer(httpServer, {
-    cors: {
-        origin: true,
-        credentials: true
-    }
+    cors: corsConfig
 });
 
 const PORT = process.env.PORT || 5000;
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/ecologix';
 
 // Middleware
-app.use(cors({
-    origin: true,
-    credentials: true
-}));
-app.options('*', cors());
+app.use(cors(corsConfig));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
