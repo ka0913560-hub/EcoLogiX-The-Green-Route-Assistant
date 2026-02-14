@@ -19,35 +19,32 @@ dotenv.config();
 const app: Express = express();
 const httpServer = createServer(app);
 
-const corsOriginCheck = (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
-    if (!origin) return callback(null, true);
+const corsOptions = {
+    origin: function (origin: any, callback: any) {
+        if (!origin) return callback(null, true);
 
-    if (
-        origin.includes('localhost:3000') ||
-        origin.includes('.vercel.app')
-    ) {
+        if (origin.includes('localhost')) {
+            return callback(null, true);
+        }
+
+        if (origin.includes('vercel.app')) {
+            return callback(null, true);
+        }
+
         callback(null, true);
-    } else {
-        callback(new Error('Not allowed by CORS'));
-    }
+    },
+    credentials: true,
 };
 
 const io = new SocketIOServer(httpServer, {
-    cors: {
-        origin: corsOriginCheck,
-        methods: ['GET', 'POST', 'PUT', 'DELETE'],
-        credentials: true
-    }
+    cors: corsOptions
 });
 
 const PORT = process.env.PORT || 5000;
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/ecologix';
 
 // Middleware
-app.use(cors({
-    origin: corsOriginCheck,
-    credentials: true
-}));
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
