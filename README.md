@@ -1,246 +1,181 @@
-# EcoLogiX – The Green Route Assistant
+# 🌿 EcoLogiX – The Green Route Assistant
 
-AI-powered route optimization SaaS for delivery trucks that reduces fuel consumption, minimizes carbon emissions, and saves time.
+AI-powered real-time route optimization system that reduces fuel consumption, minimizes carbon emissions, and dynamically reroutes delivery trucks while they are moving.
 
-## 🌟 Features
+---
 
-- **Live GPS Tracking** - Real-time truck location updates with dynamic route recalculation
-- **Smart Route Optimization** - Multi-factor AI engine considering traffic, weather, and ML predictions
-- **Predictive Congestion Model** - Linear regression ML model predicting traffic 30 minutes ahead
-- **Driver Alert System** - Real-time notifications with fuel/time savings calculations
-- **Emission Dashboard** - Track fuel saved, CO₂ reduced, and time saved with visual charts
-- **Admin Fleet Management** - Overview of all trucks with aggregate analytics
+## 🚛 Problem
 
-## 🏗️ Architecture
+Delivery trucks in India waste large amounts of fuel due to:
 
-```
-ecologix/
-├── backend/          # Node.js/Express API + Socket.io
-│   ├── src/
-│   │   ├── models/         # MongoDB schemas
-│   │   ├── services/       # Business logic
-│   │   ├── routes/         # REST API endpoints
-│   │   ├── sockets/        # WebSocket handlers
-│   │   └── server.ts       # Main server
-│   └── package.json
-│
-├── frontend/         # Next.js 14 App
-│   ├── app/
-│   │   ├── driver/         # Driver dashboard
-│   │   ├── admin/          # Admin dashboard
-│   │   ├── services/       # API client
-│   │   ├── hooks/          # React hooks
-│   │   └── types/          # TypeScript types
-│   └── package.json
-│
-└── docs/            # Documentation
-```
+- Traffic congestion
+- Idle engine time
+- Static route planning
+- No predictive traffic intelligence
+
+This leads to:
+- Increased logistics cost
+- Higher CO₂ emissions
+- Delivery delays
+
+---
+
+## 💡 Solution
+
+EcoLogiX is a smart “Green Route Assistant” that:
+
+- Tracks live truck GPS
+- Continuously recalculates eco-efficient routes
+- Predicts congestion 30 minutes ahead
+- Alerts drivers in real-time
+- Tracks fuel savings and emission reduction
+
+Unlike traditional navigation systems, EcoLogiX optimizes for **fuel efficiency and emissions**, not just speed.
+
+---
+
+## 🔥 Core Features
+
+### 🚦 Live GPS Tracking
+- Simulated real-time truck movement
+- Dynamic route recalculation
+- WebSocket-based live updates
+
+### 🧠 Smart Route Optimization Engine
+Multi-factor scoring system based on:
+- Traffic density
+- Weather impact
+- Distance efficiency
+- ML congestion prediction
+
+### 🔔 Driver Alert System
+Real-time alerts such as:
+“Turn left in 200m to save 1.2L fuel and 14 minutes.”
+
+### 📊 Emission Dashboard
+- Fuel Saved (Liters)
+- CO₂ Reduced (kg)
+- Time Saved (minutes)
+- Fleet-wide analytics
+
+### 🏢 Admin Fleet Panel
+- Monitor all trucks
+- View route history
+- Track performance metrics
+
+---
+
+## 🏗️ System Architecture
+
+Frontend (Next.js + Leaflet + Socket.io)  
+↓  
+Backend (Node.js + Express + WebSocket)  
+↓  
+MongoDB (Truck + Route + Analytics Models)  
+↓  
+Optimization Engine (Traffic + Weather + ML Predictor)
+
+---
+
+## 🧠 Core Algorithms
+
+### Route Scoring Formula
+
+score =  
+(traffic × 0.4) +  
+(weather × 0.2) +  
+(distance × 0.25) +  
+(ml_prediction × 0.15)
+
+Lower score = More eco-efficient route
+
+---
+
+### Fuel Calculation
+
+fuel = distance × 0.3 L/km × (1 + traffic × 1.5) × (1 + weather × 0.4)
+
+CO₂ = fuel × 2.68 kg/L
+
+---
+
+### ML Congestion Predictor
+
+Linear Regression Model:
+
+congestion = β₀ + β₁(hour) + β₂(dayOfWeek) + β₃(roadSegment)
+
+Predicts traffic 30 minutes ahead using historical simulation data.
+
+---
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
-- Node.js 18+ installed
-- MongoDB running (local or MongoDB Atlas)
-- npm or yarn package manager
+- Node.js 18+
+- MongoDB (local or Atlas)
+- npm or yarn
 
-### Installation
 
-1. **Clone and navigate to project**
-   ```bash
-   cd ecologix
-   ```
-
-2. **Setup Backend**
-   ```bash
-   cd backend
-   npm install
-   cp .env.example .env
-   # Edit .env with your MongoDB URI
-   npm run dev
-   ```
-   Backend will run on `http://localhost:5000`
-
-3. **Setup Frontend** (in new terminal)
-   ```bash
-   cd frontend
-   npm install
-   npm run dev
-   ```
-   Frontend will run on `http://localhost:3000`
-
-4. **Access the Application**
-   - Landing Page: http://localhost:3000
-   - Driver Dashboard: http://localhost:3000/driver
-   - Admin Dashboard: http://localhost:3000/admin
+---
 
 ## 📡 API Endpoints
 
 ### Trucks
-- `GET /api/trucks` - Get all trucks
-- `GET /api/trucks/:id` - Get truck by ID
-- `POST /api/trucks` - Create new truck
-- `PUT /api/trucks/:id` - Update truck
+GET /api/trucks  
+POST /api/trucks  
 
 ### Routes
-- `POST /api/routes` - Create and optimize route
-- `GET /api/routes/:id` - Get route details
-- `POST /api/routes/:id/optimize` - Trigger recalculation
-- `GET /api/routes/:id/traffic` - Get live traffic data
+POST /api/routes  
+POST /api/routes/:id/optimize  
 
 ### Analytics
-- `GET /api/analytics/fleet` - Fleet-wide metrics
-- `GET /api/analytics/truck/:id` - Truck-specific analytics
-- `GET /api/analytics/predictions` - ML congestion predictions
-- `GET /api/analytics/emissions` - Emission reports
+GET /api/analytics/fleet  
+GET /api/analytics/predictions  
 
 ### WebSocket Events
-- `route:start` - Start GPS tracking
-- `position:updated` - Real-time position broadcasts
-- `route:optimized` - New optimized route available
-- `alert:new` - Driver alert notification
-
-## 🧠 Core Algorithms
-
-### Route Optimization
-Multi-factor scoring system:
-- Traffic congestion: 40% weight
-- Weather impact: 20% weight
-- Distance efficiency: 25% weight  
-- ML predictions: 15% weight
-
-### Fuel Calculation
-```
-fuel = distance × 0.3 L/km × (1 + traffic × 1.5) × (1 + weather × 0.4)
-CO₂ = fuel × 2.68 kg/L
-```
-
-### ML Congestion Predictor
-Simple linear regression:
-```
-congestion = β₀ + β₁(hour) + β₂(dayOfWeek) + β₃(segment)
-```
-
-Predicts traffic 30 minutes ahead using historical patterns.
-
-## 🗄️ Database Schema
-
-### Truck Model
-- truckId, registrationNumber, driverName
-- currentLocation (lat, lng, timestamp)
-- status, activeRouteId, fuelCapacity
-
-### Route Model
-- routeId, truckId, origin, destination, waypoints
-- status, metrics (fuel, CO₂, time saved)
-- trafficData, recalculations history
-
-### Analytics Model
-- date, truckId, daily metrics
-- totalRoutes, fuelSaved, CO₂Reduced
-- hourly breakdown
-
-## 🎨 Tech Stack
-
-**Frontend:**
-- Next.js 14 (App Router)
-- React 18
-- TypeScript
-- Tailwind CSS
-- Leaflet (Maps)
-- Recharts (Analytics)
-- Socket.io Client
-
-**Backend:**
-- Node.js + Express
-- TypeScript
-- MongoDB + Mongoose
-- Socket.io
-- Mock APIs (traffic, weather)
-
-## 📦 Deployment
-
-### Frontend (Vercel)
-```bash
-cd frontend
-npm run build
-# Deploy to Vercel
-vercel deploy
-```
-
-### Backend (Railway/Render)
-```bash
-cd backend
-npm run build
-# Set environment variables in platform
-# Deploy using Git integration
-```
-
-### MongoDB
-- Use MongoDB Atlas for cloud hosting
-- Update `.env` with connection string
-
-## 🔧 Configuration
-
-### Backend `.env`
-```env
-MONGODB_URI=mongodb://localhost:27017/ecologix
-PORT=5000
-FRONTEND_URL=http://localhost:3000
-NODE_ENV=development
-```
-
-### Frontend `.env.local`
-```env
-NEXT_PUBLIC_API_URL=http://localhost:5000
-```
-
-## 📝 Usage
-
-1. **Create a Truck**
-   - Use API or demo truck will be auto-created
-
-2. **Start a Route**
-   - Go to Driver Dashboard
-   - Click "Start Route" button
-   - Watch live GPS tracking
-
-3. **Monitor Fleet**
-   - Go to Admin Dashboard
-   - View all trucks and aggregate metrics
-   - Analyze emissions charts
-
-4. **Real-time Updates**
-   - Position updates every 5 seconds
-   - Route recalculation when traffic changes >30%
-   - Driver alerts for fuel-saving opportunities
-
-## 🤝 Contributing
-
-This is an MVP prototype. For production:
-- Replace mock APIs with real services (Google Maps, OpenWeatherMap)
-- Enhance ML model with TensorFlow.js
-- Add authentication and authorization
-- Implement proper error handling
-- Add comprehensive testing
-
-## 📄 License
-
-MIT License
-
-## 🌱 MVP Status
-
-This is a working MVP demonstrating:
-✅ Real-time GPS tracking simulation  
-✅ Route optimization with multi-factor scoring  
-✅ ML-based congestion prediction  
-✅ Driver alerts and emission tracking  
-✅ Fleet management dashboard  
-✅ WebSocket real-time updates  
-✅ Modern, responsive UI with glassmorphism  
-
-**Not Production Ready** - Uses simulated data for traffic, weather, and GPS. Replace with real APIs for production deployment.
+route:start  
+position:updated  
+route:optimized  
+alert:new  
 
 ---
 
-Built with 💚 for a greener future
+## 🌍 Tech Stack
+
+Frontend:
+- Next.js 14
+- React 18
+- TypeScript
+- Tailwind CSS
+- Leaflet
+- Recharts
+- Socket.io Client
+
+Backend:
+- Node.js
+- Express
+- MongoDB
+- Mongoose
+- Socket.io
+
+---
+
+
+## 🌱 MVP Status
+
+✔ Real-time GPS simulation  
+✔ Dynamic route recalculation  
+✔ Predictive congestion logic  
+✔ Emission tracking  
+✔ Fleet analytics  
+✔ WebSocket live updates  
+
+Note: Uses simulated traffic and weather data. Replace with real APIs for production.
+
+---
+
+## 💚 Vision
+
+EcoLogiX aims to reduce logistics carbon footprint by making every delivery smarter, faster, and greener.
