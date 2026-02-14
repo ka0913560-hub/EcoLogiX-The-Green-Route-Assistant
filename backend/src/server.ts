@@ -19,32 +19,22 @@ dotenv.config();
 const app: Express = express();
 const httpServer = createServer(app);
 
-const corsOptions = {
-    origin: function (origin: any, callback: any) {
-        if (!origin) return callback(null, true);
-
-        if (origin.includes('localhost')) {
-            return callback(null, true);
-        }
-
-        if (origin.includes('vercel.app')) {
-            return callback(null, true);
-        }
-
-        callback(null, true);
-    },
-    credentials: true,
-};
-
 const io = new SocketIOServer(httpServer, {
-    cors: corsOptions
+    cors: {
+        origin: true,
+        credentials: true
+    }
 });
 
 const PORT = process.env.PORT || 5000;
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/ecologix';
 
 // Middleware
-app.use(cors(corsOptions));
+app.use(cors({
+    origin: true,
+    credentials: true
+}));
+app.options('*', cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
